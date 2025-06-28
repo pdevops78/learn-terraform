@@ -26,10 +26,14 @@ resource "null_resource" "provisioner" {
     inline = [
       "sudo pip3.11 install ansible hvac",
       "ansible-pull -i localhost, -U https://github.com/pdevops78/expense-ansible getsecrets.yml -e env=${var.env} -e component_name=${var.component} -e project_name=expense",
-      "ansible-pull -i localhost, -U https://github.com/pdevops78/expense-ansible expense.yml -e env=${var.env} -e component_name=${var.component} -e @secrets.json -e @app.json"
+      "ansible-pull -i localhost, -U https://github.com/pdevops78/expense-ansible expense.yml -e env=${var.env} -e component_name=${var.component} -e @~/secrets.json -e @~/app.json"
     ]
   }
-
+   provisioner "remote-exec" {
+    inline = [
+      "rm -f ~/secrets.json ~/app.json"
+    ]
+  }
 }
 resource "aws_security_group" "sg" {
   name                 =    "${var.env}-custom-vpc-sg"
