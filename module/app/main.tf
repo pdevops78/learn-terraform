@@ -39,9 +39,9 @@ resource "aws_security_group" "sg" {
   name                 =    "${var.env}-custom-vpc-sg"
   description          =    "Allow TLS inbound traffic and all outbound traffic"
    ingress {
-      from_port        =     0
-      to_port          =     0
-      protocol         =    "-1"
+      from_port        =     var.app_port
+      to_port          =     var.app_port
+      protocol         =    "tcp"
       cidr_blocks      =    ["0.0.0.0/0"]
      }
    egress {
