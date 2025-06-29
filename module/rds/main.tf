@@ -1,21 +1,21 @@
 resource "aws_db_instance" "default" {
-  allocated_storage    = 10
+  allocated_storage    = 20
   db_name              = "mydb"
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
-  username             = "admin"
-  password             = "expense123"
+  engine               = var.engine
+  engine_version       = var.engine_version
+  instance_class       = var.instance_class
+  username             = jsondecode(data.vault_generic_secret.vault-secrets.data_json).rds_username
+  password             = jsondecode(data.vault_generic_secret.vault_secrets.data_json).rds_password
   parameter_group_name = aws_db_parameter_group.pg.name
-  skip_final_snapshot  = true
+  skip_final_snapshot  = var.skip_final_snapshot
   db_subnet_group_name = aws_db_subnet_group.sg.name
-  multi_az             = false
+  multi_az             = var.multi_az
   vpc_security_group_ids = [aws_security_group.sg.id]
 }
 
 resource "aws_db_parameter_group" "pg" {
   name   = "${var.env}-pg"
-  family = "mysql8.0"
+  family = var.family
  }
 
 resource "aws_db_subnet_group" "sg" {
