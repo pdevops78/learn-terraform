@@ -18,5 +18,6 @@ storage_type = "gp3"
 publicly_accessible = "no"
 family = "mysql8.0"
 multi_az = false
+  skip_final_snapshot = ""
 }
 
